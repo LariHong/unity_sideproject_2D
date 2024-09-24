@@ -47,3 +47,6 @@ Static（静态）：固定在场景中的物体，不会移动且不受物理�
 
 ## 舊的 Input System
 [看code註解](./Player.cs)
+
+## 新的 Input System
+[參考網址](https://www.youtube.com/watch?v=1_s8IIMDKaU)
