@@ -53,16 +53,5 @@ public class Player : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
-        // 如果有水平输入，讓它滚动
-        if (xInput != 0)
-        {
-            float torque = -xInput * 2; // 使用負號讓滚动方向正确
-            rb.AddTorque(torque);
-        }
-        else
-        {
-            // 如果没有输入，停止角速度，立即停止滚动
-            rb.angularVelocity = 0;
-        }
     }
 }
