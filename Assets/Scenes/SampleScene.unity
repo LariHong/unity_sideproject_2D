@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 587464564}
   - component: {fileID: 587464563}
   - component: {fileID: 587464565}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -525,10 +525,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ed4e3a916a8c9468f9ce04ad9584ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
+  playerGroundDistance: 1.5
+  isGround: 0
   xInput: 0
   yInput: 0
   moveSpeed: 2
-  jumpForce: 1
+  jumpForce: 4
   rb: {fileID: 0}
 --- !u!70 &1536527343
 CapsuleCollider2D:
