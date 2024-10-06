@@ -14,6 +14,17 @@ public class Player : MonoBehaviour
     private bool isGround;
     private int playerFacing = 1;
     private bool playerFacingRight = true;
+    [Header("角色Dash操控")]
+    [SerializeField]
+    private float dashSpeed;
+    [SerializeField]
+    private float dashDuration;
+    [SerializeField]
+    private float dashTime;
+    [SerializeField]
+    private float dashCooldown;
+    [SerializeField]
+    private float dashCooldownTimer;
 
     [Header("角色物理")]
     public float xInput;
@@ -38,6 +49,12 @@ public class Player : MonoBehaviour
         CheckInput();
         Movement();
         JumpCheck();
+
+        dashTime -= Time.deltaTime;
+        dashCooldownTimer -= Time.deltaTime;
+
+        
+
         FlipController();
         AnimatorController();
     }
@@ -58,11 +75,32 @@ public class Player : MonoBehaviour
         {
             Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.Q) )
+        {
+            Dash();
+        }
+    }
+
+    private void Dash()
+    {
+        if(dashCooldownTimer < 0)
+        {
+            dashCooldownTimer = dashCooldown;
+            dashTime = dashDuration;
+        }
     }
 
     private void Movement()
     {
-        rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        if (dashTime > 0)
+        {
+            rb.velocity = new Vector2(xInput * dashSpeed, 0);
+        }
+        else
+        {
+            rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        }
     }
 
     private void Jump()
@@ -95,6 +133,7 @@ public class Player : MonoBehaviour
         anim.SetFloat("yVelocity", rb.velocity.y);
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGround);
+        anim.SetBool("isDashing", dashTime > 0);
     }
     #endregion
 
