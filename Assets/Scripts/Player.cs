@@ -25,6 +25,11 @@ public class Player : MonoBehaviour
     private float dashCooldown;
     [SerializeField]
     private float dashCooldownTimer;
+    [Header("角色Attack操控")]
+    private float comboTime=0.8f;
+    private float comboTimeCounter;
+    private bool isAttacking;
+    private int comboCounter;
 
     [Header("角色物理")]
     public float xInput;
@@ -52,8 +57,7 @@ public class Player : MonoBehaviour
 
         dashTime -= Time.deltaTime;
         dashCooldownTimer -= Time.deltaTime;
-
-        
+        comboTimeCounter -= Time.deltaTime;
 
         FlipController();
         AnimatorController();
@@ -80,11 +84,35 @@ public class Player : MonoBehaviour
         {
             Dash();
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        if (!isGround) return;
+
+        if (comboTimeCounter < 0) comboCounter = 0;
+
+        isAttacking = true;
+
+        comboTimeCounter = comboTime;
+    }
+
+    public  void AttackOver()
+    {
+        isAttacking = false;
+
+        comboCounter++;
+        if ( comboCounter > 2 ) comboCounter = 0;
     }
 
     private void Dash()
     {
-        if(dashCooldownTimer < 0)
+        if(dashCooldownTimer < 0 && !isAttacking)
         {
             dashCooldownTimer = dashCooldown;
             dashTime = dashDuration;
@@ -93,9 +121,13 @@ public class Player : MonoBehaviour
 
     private void Movement()
     {
-        if (dashTime > 0)
+        if (isAttacking)
         {
-            rb.velocity = new Vector2(xInput * dashSpeed, 0);
+            rb.velocity = new Vector2(0, 0);
+        }
+        else if (dashTime > 0)
+        {
+            rb.velocity = new Vector2(playerFacing * dashSpeed, 0);
         }
         else
         {
@@ -134,6 +166,8 @@ public class Player : MonoBehaviour
         anim.SetBool("isMoving", isMoving);
         anim.SetBool("isGrounded", isGround);
         anim.SetBool("isDashing", dashTime > 0);
+        anim.SetBool("isAttacking", isAttacking);
+        anim.SetInteger("comboCounter", comboCounter);
     }
     #endregion
 
